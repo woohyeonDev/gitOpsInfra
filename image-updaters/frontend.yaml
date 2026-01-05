@@ -1,0 +1,30 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: frontend
+  namespace: argocd
+spec:
+  namespace: argocd
+
+  # Global write-back configuration
+  writeBackConfig:
+    method: argocd
+
+  # Global update settings
+  commonUpdateSettings:
+    updateStrategy: digest
+
+  # Application selection
+  applicationRefs:
+    - namePattern: "frontend"
+
+      # Images to track
+      images:
+        - alias: frontend
+          imageName: ghcr.io/woohyeondev/tube-standard-web
+
+          # Where to update in manifests (Helm)
+          manifestTargets:
+            helm:
+              name: image.repository
+              tag: image.tag
