@@ -34,7 +34,7 @@ env:
 
 # Secret values - TODO: Update with actual production values
 secret:
-  lmsIssuer: "https://lms.example.com"  # TODO: Update with actual LMS issuer URL
+  lmsIssuer: "https://lms.example.co.kr"  # TODO: Update with actual LMS issuer URL
   lmsClientId: "client-id-123"  # TODO: Update with actual client ID
   toolLaunchUri: "https://tool.example.com/lti/launch"  # TODO: Update with actual tool launch URI
   toolLoginEndpoint: "https://your-domain.com/login"  # TODO: Update with actual login endpoint
