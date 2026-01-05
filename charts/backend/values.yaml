@@ -1,0 +1,44 @@
+image:
+  repository: ghcr.io/woohyeondev/tube-standard-api
+  # TODO: Update tag with specific version from CI/CD (e.g., "v1.0.0" or git SHA)
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 3001
+
+ingress:
+  enabled: true
+  # TODO: Update with your actual domain
+  host: api.local
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+envFrom:
+  - secretRef:
+      name: backend-secret
+
+env:
+  # Public environment variables (non-sensitive)
+  - name: NODE_ENV
+    value: "production"
+  - name: PORT
+    value: "3001"
+
+# Secret values - TODO: Update with actual production values
+secret:
+  databaseUrl: "postgresql://user:password@postgres:5432/dbname"  # TODO: Update with actual database URL
+  jwtSecret: "your-jwt-secret-here"  # TODO: Update with actual JWT secret
+  apiKey: "your-api-key-here"  # TODO: Update with actual API key
+
+imagePullSecrets:
+  - name: ghcr-secret
