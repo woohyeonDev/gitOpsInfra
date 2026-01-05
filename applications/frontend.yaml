@@ -6,8 +6,9 @@ metadata:
   annotations:
     # ArgoCD Image Updater 설정
     argocd-image-updater.argoproj.io/image-list: frontend=ghcr.io/woohyeondev/tube-standard-web
-    argocd-image-updater.argoproj.io/frontend.update-strategy: latest
+    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
     argocd-image-updater.argoproj.io/frontend.allow-tags: regexp:^[a-f0-9]{40}$
+    argocd-image-updater.argoproj.io/frontend.force-update: "true"
     argocd-image-updater.argoproj.io/write-back-method: argocd
     argocd-image-updater.argoproj.io/frontend.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/frontend.helm.image-tag: image.tag
@@ -24,7 +25,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default  # TODO: Update with your target namespace
+    namespace: dev  # TODO: Update with your target namespace
 
   syncPolicy:
     automated:
