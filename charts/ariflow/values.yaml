@@ -1,0 +1,26 @@
+executor: LocalExecutor
+
+airflow:
+  image:
+    repository: apache/airflow
+    tag: 2.8.1
+
+webserver:
+  service:
+    type: ClusterIP
+
+scheduler:
+  replicas: 1
+
+workers:
+  enabled: false
+
+postgresql:
+  enabled: true
+
+redis:
+  enabled: false
+
+dags:
+  persistence:
+    enabled: false
