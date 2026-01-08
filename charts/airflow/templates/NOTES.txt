@@ -1,8 +1,0 @@
-Apache Airflow has been deployed!
-
-To access the Airflow web UI:
-{{- if .Values.webserver.service.type }}
-  Service Type: {{ .Values.webserver.service.type }}
-{{- end }}
-
-For more information, visit: https://airflow.apache.org/
