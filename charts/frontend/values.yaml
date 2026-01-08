@@ -1,7 +1,7 @@
 image:
   repository: ghcr.io/woohyeondev/tube-standard-web
   # This will be automatically updated by ArgoCD Image Updater with git SHA
-  tag: "latest"
+  tag: "3fc96d666cd705197456626aad489eaf1b832e51"
   pullPolicy: Always
 
 replicaCount: 1
