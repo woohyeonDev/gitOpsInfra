@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: frontend=ghcr.io/woohyeondev/tube-standard-web
-    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
+    argocd-image-updater.argoproj.io/frontend.update-strategy: latest-with-digest
     argocd-image-updater.argoproj.io/frontend.allow-tags: regexp:^([a-f0-9]{7,40})$
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/frontend.helm.image-name: image.repository
