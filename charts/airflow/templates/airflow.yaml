@@ -21,7 +21,7 @@ spec:
         env:
         - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
           valueFrom:
-            secretRef:
+            secretKeyRef:
               name: {{ .Values.postgresql.secretName }}
               key: SQL_ALCHEMY_CONN
         ports:
