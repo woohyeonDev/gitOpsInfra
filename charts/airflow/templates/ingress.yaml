@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: airflow-ingress
+  namespace: airflow
+  annotations:
+    # Nginx Ingress Controller를 사용한다고 가정
+    kubernetes.io/ingress.class: nginx
+    # 접속 경로 설정을 위한 설정 (Airflow는 루트 경로 권장)
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: airflow.local  # 접속할 도메인 이름
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: airflow-web
+            port:
+              number: 8080
