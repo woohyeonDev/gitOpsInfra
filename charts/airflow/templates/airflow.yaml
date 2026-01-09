@@ -21,3 +21,15 @@ spec:
           value: "postgresql+psycopg2://postgres:airflow@airflow-db:5432/airflow"
         ports:
         - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: airflow-web
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      nodePort: 30080
+  selector:
+    app: airflow
