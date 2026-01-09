@@ -159,3 +159,17 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+dags:
+  gitSync:
+    enabled: true
+    # GitLab 프로젝트 페이지에서 복사한 SSH 주소
+    repo: git@gitlab.com:dntlr92/tube-standard-etl.git
+    branch: main
+    wait: 60
+    ssh: true
+    sshKeySecret: airflow-ssh-secret
+    # Known Hosts 체크로 인한 접속 끊김 방지
+    extraArgs:
+      - --ssh-known-hosts=false
