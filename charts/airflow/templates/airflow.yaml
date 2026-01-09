@@ -26,11 +26,14 @@ spec:
             secretKeyRef:
               name: {{ .Values.postgresql.secretName }}
               key: SQL_ALCHEMY_CONN
+        - name: AIRFLOW__CORE__DAGS_FOLDER
+          value: "/git/dags"
         ports:
         - containerPort: 8080
         volumeMounts:
         - name: dags-data
-          mountPath: /opt/airflow/dags
+          mountPath: /git
+          readOnly: true
 
       - name: git-sync
         image: {{ .Values.dags.gitSync.image }}:{{ .Values.dags.gitSync.tag }}
