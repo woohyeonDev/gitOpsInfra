@@ -21,6 +21,37 @@ spec:
           value: "postgresql+psycopg2://postgres:airflow@airflow-db:5432/airflow"
         ports:
         - containerPort: 8080
+        volumeMounts:
+        - name: dags-data
+          mountPath: /opt/airflow/dags
+
+      - name: git-sync
+        image: registry.k8s.io/git-sync/git-sync:v4.2.0
+        args:
+          - --repo=git@gitlab.com:dntlr92/tube-standard-etl.git
+          - --branch=main
+          - --wait=60
+          - --ssh=true
+          - --root=/git
+          - --dest=dags
+          - --link=dags
+        env:
+          - name: GIT_SSH_KEY_FILE
+            value: /etc/git-secret/ssh
+        volumeMounts:
+          - name: dags-data
+            mountPath: /git
+          - name: git-ssh-key
+            mountPath: /etc/git-secret
+            readOnly: true
+
+      volumes:
+        - name: dags-data
+          emptyDir: {}
+        - name: git-ssh-key
+          secret:
+            secretName: airflow-ssh-secret  # 아까 만든 Secret 이름
+            defaultMode: 0400              # 권한 설정 중요
 ---
 apiVersion: v1
 kind: Service
