@@ -29,12 +29,12 @@ spec:
         image: registry.k8s.io/git-sync/git-sync:v4.2.0
         args:
           - --repo=git@gitlab.com:dntlr92/tube-standard-etl.git
-          - --branch=main
-          - --wait=60
-          - --ssh=true
+          - --ref=main             # --branch 대신 --ref 사용
+          - --period=60s           # --wait 대신 --period 사용 (단위 s 필수)
+          - --link=dags            # --dest 대신 --link 사용
           - --root=/git
-          - --dest=dags
-          - --link=dags
+          - --ssh-key-file=/etc/git-secret/ssh
+          - --ssh-known-hosts=false # ← 이 줄이 핵심입니다! (서버 체크 끄기)
         env:
           - name: GIT_SSH_KEY_FILE
             value: /etc/git-secret/ssh
