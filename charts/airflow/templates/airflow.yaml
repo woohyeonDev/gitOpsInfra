@@ -51,7 +51,7 @@ spec:
         - name: git-ssh-key
           secret:
             secretName: airflow-ssh-secret  # 아까 만든 Secret 이름            
-            defaultMode: 256          # 권한 설정 중요
+            defaultMode: 0400          # 권한 설정 중요
 ---
 apiVersion: v1
 kind: Service
