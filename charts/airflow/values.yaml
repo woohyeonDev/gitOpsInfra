@@ -60,8 +60,8 @@ service:
 ingress:
   enabled: true
   className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  annotations: {}
+    # nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: airflow.local
       paths:
