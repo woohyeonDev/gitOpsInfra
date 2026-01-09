@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: airflow
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: airflow
@@ -14,11 +15,15 @@ spec:
     spec:
       containers:
       - name: airflow
-        image: apache/airflow:2.8.1-python3.11
-        args: ["standalone"] # 중요: 한 컨테이너에서 DB 초기화, 웹서버, 스케줄러를 다 띄우는 학습용 모드
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["{{ .Values.airflow.mode }}"]
         env:
         - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
-          value: "postgresql+psycopg2://postgres:airflow@airflow-db:5432/airflow"
+          valueFrom:
+            secretRef:
+              name: {{ .Values.postgresql.secretName }}
+              key: SQL_ALCHEMY_CONN
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -26,15 +31,17 @@ spec:
           mountPath: /opt/airflow/dags
 
       - name: git-sync
-        image: registry.k8s.io/git-sync/git-sync:v4.2.0
+        image: {{ .Values.dags.gitSync.image }}:{{ .Values.dags.gitSync.tag }}
         args:
-          - --repo=git@gitlab.com:dntlr92/tube-standard-etl.git
-          - --ref=main             # --branch 대신 --ref 사용
-          - --period=60s           # --wait 대신 --period 사용 (단위 s 필수)
-          - --link=dags            # --dest 대신 --link 사용
+          - --repo={{ .Values.dags.gitSync.repo }}
+          - --ref={{ .Values.dags.gitSync.branch }}
+          - --period={{ .Values.dags.gitSync.period }}
+          - --link=dags
           - --root=/git
           - --ssh-key-file=/etc/git-secret/ssh
-          - --ssh-known-hosts=false # ← 이 줄이 핵심입니다! (서버 체크 끄기)
+          {{- if .Values.dags.gitSync.sshKnownHosts }}
+          - --ssh-known-hosts=false
+          {{- end }}
         env:
           - name: GIT_SSH_KEY_FILE
             value: /etc/git-secret/ssh
@@ -50,13 +57,14 @@ spec:
           emptyDir: {}
         - name: git-ssh-key
           secret:
-            secretName: airflow-ssh-secret  # 아까 만든 Secret 이름            
-            defaultMode: 0400          # 권한 설정 중요
+            secretName: {{ .Values.dags.gitSync.sshKeySecret }}
+            defaultMode: 0400
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: airflow-web
+  namespace: {{ .Values.namespace }}
 spec:
   type: NodePort
   ports:

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: airflow-db
+  namespace: {{ .Values.namespace }}
 spec:
   serviceName: "airflow-db"
   replicas: 1
@@ -15,17 +16,16 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: bitnami/postgresql:latest 
-        env:
-        - name: POSTGRES_PASSWORD
-          value: "airflow"
-        - name: POSTGRES_DB
-          value: "airflow"
+        image: {{ .Values.postgresql.image }}:{{ .Values.postgresql.tag }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.postgresql.secretName }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: airflow-db
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
     - port: 5432

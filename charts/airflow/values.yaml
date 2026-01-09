@@ -7,11 +7,11 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: nginx
+  repository: apache/airflow
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "2.8.1-python3.11"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -58,20 +58,19 @@ service:
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: chart-example.local
+    - host: airflow.local
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
-    # - secretName: chart-example-tls
+    # - secretName: airflow-tls
     #   hosts:
-    #     - chart-example.local
+    #     - airflow.local
 
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
@@ -161,15 +160,35 @@ tolerations: []
 affinity: {}
 
 
+namespace: airflow
+
+# Airflow specific configurations
+airflow:
+  mode: standalone
+  database:
+    host: airflow-db
+    port: 5432
+    name: airflow
+    user: postgres
+    secretName: airflow-db-secret
+
+# DAG Git Sync Configuration
 dags:
   gitSync:
     enabled: true
+    image: registry.k8s.io/git-sync/git-sync
+    tag: v4.2.0
     # GitLab 프로젝트 페이지에서 복사한 SSH 주소
     repo: git@gitlab.com:dntlr92/tube-standard-etl.git
     branch: main
-    wait: 60
+    period: 60s
     ssh: true
     sshKeySecret: airflow-ssh-secret
     # Known Hosts 체크로 인한 접속 끊김 방지
-    extraArgs:
-      - --ssh-known-hosts=false
+    sshKnownHosts: false
+
+# PostgreSQL Database Configuration
+postgresql:
+  image: bitnami/postgresql
+  tag: latest
+  secretName: airflow-db-secret
