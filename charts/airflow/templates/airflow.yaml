@@ -13,6 +13,8 @@ spec:
       labels:
         app: airflow
     spec:
+      securityContext:
+        fsGroup: 65533
       containers:
       - name: airflow
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
