@@ -39,12 +39,7 @@ spec:
           - --link=dags
           - --root=/git
           - --ssh-key-file=/etc/git-secret/ssh
-          {{- if .Values.dags.gitSync.sshKnownHosts }}
           - --ssh-known-hosts=false
-          {{- end }}
-        env:
-          - name: GIT_SSH_KEY_FILE
-            value: /etc/git-secret/ssh
         volumeMounts:
           - name: dags-data
             mountPath: /git
