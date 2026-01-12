@@ -1,0 +1,26 @@
+dagsterWebserver:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+
+dagsterDaemon:
+  enabled: true
+
+postgresql:
+  enabled: true
+  postgresqlUsername: dagster
+  postgresqlPassword: dagster
+  postgresqlDatabase: dagster
+
+# ✅ 올바른 RunLauncher
+runLauncher:
+  type: K8sRunLauncher
+
+computeLogManager:
+  type: LocalComputeLogManager
+  config:
+    localComputeLogManager:
+      baseDir: /opt/dagster/dagster_home/compute_logs
+
+pythonLogs:
+  pythonLogLevel: INFO
