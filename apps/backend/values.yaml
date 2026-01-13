@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/woohyeondev/tube-standard-api
+  repository: registry.gitlab.com/dntlr92/tube-standard-api
   # This will be automatically updated by ArgoCD Image Updater with git SHA
   tag: "latest"
   pullPolicy: Always
@@ -41,4 +41,4 @@ secret:
   apiKey: "your-api-key-here"  # TODO: Update with actual API key
 
 imagePullSecrets:
-  - name: ghcr-secret
+  - name: gitlab-registry-secret
