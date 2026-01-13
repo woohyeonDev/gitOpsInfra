@@ -41,4 +41,4 @@ secret:
   apiKey: "your-api-key-here"  # TODO: Update with actual API key
 
 imagePullSecrets:
-  - name: gitlab-registry-secret
+  - name: backend-registry-secret

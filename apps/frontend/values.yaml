@@ -41,5 +41,11 @@ secret:
 
 
 imagePullSecrets:
-  - name: gitlab-registry-secret
+  - name: frontend-registry-secret
 
+kubectl create secret docker-registry backend-registry-secret ^
+  --docker-server=registry.gitlab.com ^
+  --docker-username=gitlab+deploy-token-10843619 ^
+  --docker-password=gldt-En5kUQPh-QZyu7x6dTHQ ^
+  --docker-email=dev@example.com ^
+  -n dev
