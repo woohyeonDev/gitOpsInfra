@@ -41,4 +41,5 @@ secret:
 
 
 imagePullSecrets:
-  - name: ghcr-secret
+  - name: gitlab-registry-secret
+
