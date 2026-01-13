@@ -1,0 +1,27 @@
+# Default values for postgres
+namespace: postgres
+
+postgresql:
+  image: bitnami/postgresql
+  tag: "16"
+  secretName: postgres-secret
+  database: postgres
+  user: postgres
+
+  # Storage configuration
+  storage:
+    size: 10Gi
+    storageClass: ""  # Use default storage class
+
+  # Resource limits
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+service:
+  type: ClusterIP
+  port: 5432
