@@ -1,5 +1,5 @@
 image:
-  repository: registry.gitlab.com/dntlr92/tube-standard-api
+  repository: registry.gitlab.com/dntlr92/fastapi-app
   # This will be automatically updated by ArgoCD Image Updater with git SHA
   tag: "latest"
   pullPolicy: Always
