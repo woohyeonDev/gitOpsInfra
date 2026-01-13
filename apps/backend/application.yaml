@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: frontend=ghcr.io/woohyeondev/tube-standard-api:latest
+    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
+    argocd-image-updater.argoproj.io/frontend.helm.image-spec: image.repository
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/woohyeonDev/gitOpsInfra.git
+    targetRevision: main
+    path: apps/backend
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
