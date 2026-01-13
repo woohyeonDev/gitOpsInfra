@@ -3,7 +3,7 @@ namespace: postgres
 
 postgresql:
   image: bitnami/postgresql
-  tag: "16"
+  tag: latest
   secretName: postgres-secret
   database: postgres
   user: postgres
