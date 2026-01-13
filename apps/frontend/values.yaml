@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/woohyeondev/tube-standard-web
+  repository: registry.gitlab.com/dntlr92/tube-standard-web
   # This will be automatically updated by ArgoCD Image Updater with git SHA
   tag: latest
   pullPolicy: Always
